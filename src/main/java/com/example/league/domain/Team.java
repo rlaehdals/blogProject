@@ -69,4 +69,11 @@ public class Team extends BaseEntity {
         return team;
     }
 
+
+    // 비즈니스 로직 추가
+    public void decrease(User user){
+        nowSize--;
+        userList.remove(user);
+    }
+
 }

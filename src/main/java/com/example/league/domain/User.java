@@ -65,4 +65,11 @@ public class User {
         user.name=name;
         return user;
     }
+
+
+    // 비즈니스 로직 추가
+    public void removeTeam(){
+        this.team.decrease(this);
+        this.team=null;
+    }
 }

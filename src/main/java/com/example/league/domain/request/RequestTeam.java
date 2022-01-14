@@ -31,6 +31,7 @@ public class RequestTeam extends BaseEntity {
     private Boolean request;
 
 
+    // 연관 관계 메소드
     private void setUser(User user) {
         this.user = user;
     }
@@ -44,6 +45,7 @@ public class RequestTeam extends BaseEntity {
         team.getRequestTeamList().add(this);
     }
 
+    // 생성 메소드
     public static RequestTeam createRequestTeam(User user, Team team) {
         RequestTeam requestTeam = new RequestTeam();
         requestTeam.request = false;
@@ -51,6 +53,13 @@ public class RequestTeam extends BaseEntity {
         requestTeam.setUser(user);
         requestTeam.addRequestTeam();
         return requestTeam;
+    }
+
+
+    // 비즈니스 로직 추가
+    public void removeRequest(){
+        user.getRequestTeamList().remove(this);
+        team.getRequestTeamList().remove(this);
     }
 
 }

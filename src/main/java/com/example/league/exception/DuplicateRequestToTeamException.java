@@ -1,4 +1,4 @@
-package com.example.league.dto;
+package com.example.league.exception;
 
 public class DuplicateRequestToTeamException extends RuntimeException{
     public DuplicateRequestToTeamException() {

@@ -3,7 +3,7 @@ package com.example.league.service;
 import com.example.league.domain.Team;
 import com.example.league.domain.User;
 import com.example.league.domain.request.RequestTeam;
-import com.example.league.dto.DuplicateRequestToTeamException;
+import com.example.league.exception.DuplicateRequestToTeamException;
 import com.example.league.dto.RequestTeamDto;
 import com.example.league.exception.AlreadyTeamException;
 import com.example.league.repository.RequestTeamRepository;

@@ -31,7 +31,7 @@ class UserServiceImplTest {
 
 
     @Test
-    void userSignupSuccess() throws JsonProcessingException {
+    void userSignupSuccess() {
         Address address = getAddress();
         User user = getuser(address);
         Long signupuserId = userService.signup(new UserDto(user.getEmail(), user.getPassword(), user.getName()
@@ -68,7 +68,7 @@ class UserServiceImplTest {
         assertThat(result.getEmail()).isEqualTo("rkdlem1");
     }
     @Test
-    void userLoginFailDuplicateEmail() throws JsonProcessingException {
+    void userLoginFailDuplicateEmail(){
         Address address = getAddress();
         User user = getuser(address);
         Long signupUserId = userService.signup(new UserDto(user.getEmail(), user.getPassword(), user.getName()

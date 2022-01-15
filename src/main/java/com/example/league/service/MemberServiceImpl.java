@@ -4,7 +4,6 @@ import com.example.league.domain.Team;
 import com.example.league.domain.User;
 import com.example.league.domain.request.RequestTeam;
 import com.example.league.dto.DuplicateRequestToTeamException;
-import com.example.league.dto.MemberRequestToTeamDto;
 import com.example.league.dto.RequestTeamDto;
 import com.example.league.exception.AlreadyTeamException;
 import com.example.league.repository.RequestTeamRepository;
@@ -28,8 +27,8 @@ public class MemberServiceImpl implements MemberService{
 
 
     @Override
-    public Long requestTeam(MemberRequestToTeamDto memberRequestToTeamDto, Long memberId) {
-        Team team = teamRepository.findById(memberRequestToTeamDto.getTeamId()).get();
+    public Long requestTeam(Long teamId, Long memberId) {
+        Team team = teamRepository.findById(teamId).get();
         User user = userRepository.findById(memberId).get();
         RequestTeam requestTeam = RequestTeam.createRequestTeam(user, team);
 

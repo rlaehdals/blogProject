@@ -1,4 +1,4 @@
-package com.example.league.dto;
+package com.example.league.argumentresolver;
 
 public class SessionConst {
 

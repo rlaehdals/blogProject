@@ -62,4 +62,12 @@ public class RequestTeam extends BaseEntity {
         team.getRequestTeamList().remove(this);
     }
 
+    public void acceptRequest(){
+        request=true;
+        team.setUser(user);
+        team.addTeam(user);
+        team.increaseSize();
+    }
+
+
 }

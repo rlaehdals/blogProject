@@ -29,9 +29,11 @@ public class RequestLeague extends BaseEntity {
     @Column(name = "request_league")
     private Boolean request;
 
+    //연관 관계 메소드
     private void setLeague(League league){
         this.league=league;
     }
+
     private void setTeam(Team team){
         this.team=team;
     }
@@ -41,6 +43,7 @@ public class RequestLeague extends BaseEntity {
         this.league.getRequestLeagueList().add(this);
     }
 
+    //생성 메소드
     public static RequestLeague createRequestLeague(Team team, League league){
         RequestLeague requestLeague = new RequestLeague();
         requestLeague.request=false;
@@ -48,5 +51,11 @@ public class RequestLeague extends BaseEntity {
         requestLeague.setTeam(team);
         requestLeague.addRequestLeague();
         return requestLeague;
+    }
+
+    //비즈니스 메소드
+    public void removeRequest(){
+        league.getRequestLeagueList().remove(this);
+        team.getRequestLeagueList().remove(this);
     }
 }

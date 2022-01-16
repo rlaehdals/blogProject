@@ -10,4 +10,9 @@ import java.util.Optional;
 
 public interface TeamRepository extends JpaRepository<Team, Long> {
 
+    @Query("select t from Team t where t.name= :teamName")
+    Optional<Team> findByName(@Param("teamName") String teamName);
+
+    @Query("select t from Team  t where t.maxSize>t.nowSize")
+    List<Team> findByRestSeat();
 }

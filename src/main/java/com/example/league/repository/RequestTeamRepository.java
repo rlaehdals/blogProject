@@ -19,4 +19,11 @@ public interface RequestTeamRepository extends JpaRepository<RequestTeam, Long> 
 
     @Query("select re from RequestTeam  re join fetch re.user join fetch re.team where re.user.id= :memberId")
     List<RequestTeam> findByMemberId(@Param("memberId") Long memberId, Sort sort);
+
+    @Query("select re from RequestTeam  re join fetch re.team where re.team.id= :teamId")
+    List<RequestTeam> findByTeamId(@Param("teamId") Long teamId, Sort sort);
+
+    @Query("select re from RequestTeam re join fetch re.user join fetch re.team where re.id= :requestId")
+    Optional<RequestTeam> findWithFetchJoinUserById(@Param("requestId")Long requestId);
+
 }

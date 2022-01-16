@@ -3,6 +3,7 @@ package com.example.league.domain;
 import com.example.league.domain.auditing.BaseEntity;
 import com.example.league.domain.request.RequestLeague;
 import com.example.league.domain.request.RequestTeam;
+import com.example.league.dto.TeamDto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -69,11 +70,26 @@ public class Team extends BaseEntity {
         return team;
     }
 
-
     // 비즈니스 로직 추가
     public void decrease(User user){
         nowSize--;
         userList.remove(user);
+    }
+
+    public void increaseSize(){
+        nowSize++;
+    }
+
+    public void removeTeam(){
+        for (User user: userList){
+            user.setTeam(null);
+        }
+        userList=null;
+    }
+
+    public void update(TeamDto teamDto){
+        this.name=teamDto.getName();
+        this.maxSize=teamDto.getSize();
     }
 
 }

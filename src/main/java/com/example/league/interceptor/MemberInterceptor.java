@@ -4,17 +4,15 @@ import com.example.league.argumentresolver.SessionConst;
 import com.example.league.argumentresolver.SessionDto;
 import com.example.league.domain.ROLE;
 import com.example.league.domain.User;
-import com.example.league.exception.CanNotFindUser;
+import com.example.league.exception.CanNotFindUserException;
 import com.example.league.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
@@ -33,7 +31,7 @@ public class MemberInterceptor implements HandlerInterceptor {
         SessionDto sessionUser = (SessionDto) session.getAttribute(SessionConst.LOGIN_MEMBER);
         User user = userRepository.findById(sessionUser.getId()).orElseThrow(
                 () -> {
-                    throw new CanNotFindUser("해당 유저는 없습니다.");
+                    throw new CanNotFindUserException("해당 유저는 없습니다.");
                 }
         );
 

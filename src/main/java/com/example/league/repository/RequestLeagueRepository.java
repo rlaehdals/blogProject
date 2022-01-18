@@ -18,4 +18,9 @@ public interface RequestLeagueRepository extends JpaRepository<RequestLeague, Lo
             "re.league.id= :leagueId")
     Optional<RequestLeague> findByMemberIdAndTeamId(@Param("teamId") Long teamId, @Param("leagueId") Long leagueId);
 
+    @Query("select re from RequestLeague re join fetch re.team where re.id= :requestId")
+    Optional<RequestLeague> findWithFetchJoinUserById(@Param("requestId")Long requestId);
+
+    @Query("select re from RequestLeague  re join fetch re.league join fetch re.team where re.league.id= :leagueId")
+    List<RequestLeague> findByLeagueId(@Param("leagueId") Long leagueId);
 }

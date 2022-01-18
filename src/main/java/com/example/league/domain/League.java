@@ -1,6 +1,7 @@
 package com.example.league.domain;
 
 import com.example.league.domain.request.RequestLeague;
+import com.example.league.exception.OverMaxLeagueSizeException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,6 +43,8 @@ public class League {
     private List<Team> teamList = new ArrayList<>();
 
 
+
+    //연관 관계 메소드
     private void setUser(User user){
         this.user=user;
     }
@@ -58,6 +61,8 @@ public class League {
         team.setLeague(this);
     }
 
+
+    //생성 메소드
     public static League createLeague(Integer scaleSize,String leagueName, User user){
         League league = new League();
         league.leagueName=leagueName;
@@ -67,5 +72,13 @@ public class League {
         league.setUser(user);
         league.setLeague();
         return league;
+    }
+
+    //비즈니스 로직
+    public void increaseSize(){
+        if(scaleSize.equals(nowSize)){
+            throw new OverMaxLeagueSizeException("이미 모집이 완료된 리그입니다.");
+        }
+        nowSize++;
     }
 }

@@ -54,6 +54,16 @@ public class RequestLeague extends BaseEntity {
     }
 
     //비즈니스 메소드
+    public void acceptRequest(){
+        request=true;
+        league.setLeague(team);
+        league.addTeam(team);
+    }
+
+    public void increaseLeagueSize(){
+        league.increaseSize();
+    }
+
     public void removeRequest(){
         league.getRequestLeagueList().remove(this);
         team.getRequestLeagueList().remove(this);

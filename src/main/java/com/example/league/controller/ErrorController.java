@@ -41,4 +41,16 @@ public class ErrorController {
     public ErrorDto notExistRequest(){
         return new ErrorDto("존재하지 않는 가입 신청건 입니다.");
     }
+
+    @GetMapping("/league/noLeague")
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorDto noLoginLeague(){
+        return new ErrorDto("로그인을 해주세요.");
+    }
+
+    @GetMapping("/league/notAuthority")
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorDto noAuthorityLeague(){
+        return new ErrorDto("해당 유저는 리그 권한이 없습니다.");
+    }
 }

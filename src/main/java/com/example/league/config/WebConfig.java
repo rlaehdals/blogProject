@@ -2,6 +2,9 @@ package com.example.league.config;
 
 import com.example.league.argumentresolver.ArgumentResolver;
 import com.example.league.interceptor.MemberInterceptor;
+import com.example.league.interceptor.TeamInterceptor;
+import com.example.league.repository.RequestTeamRepository;
+import com.example.league.repository.TeamRepository;
 import com.example.league.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +19,8 @@ import java.util.List;
 public class WebConfig implements WebMvcConfigurer {
 
     private final UserRepository userRepository;
-
+    private final TeamRepository teamRepository;
+    private final RequestTeamRepository requestTeamRepository;
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         resolvers.add(new ArgumentResolver());
@@ -27,5 +31,9 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(new MemberInterceptor(userRepository))
                 .addPathPatterns("/member/**")
                 .excludePathPatterns("/signup","/login");
+
+        registry.addInterceptor(new TeamInterceptor(userRepository,teamRepository,requestTeamRepository))
+                .addPathPatterns("/team/**")
+                .excludePathPatterns("/team","/team/rest");
     }
 }

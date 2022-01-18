@@ -79,8 +79,6 @@ class UserServiceImplTest {
 
     }
 
-
-
     private Address getAddress() {
         return Address.builder()
                 .street("s")

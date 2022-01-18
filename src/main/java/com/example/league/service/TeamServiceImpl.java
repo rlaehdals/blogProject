@@ -40,16 +40,23 @@ public class TeamServiceImpl implements TeamService {
     @Override
     public List<RequestTeamDto> findRequestList(Long teamId) { //팀에 신청한 request 목록
         return requestTeamRepository.findByTeamId(teamId, Sort.by(Sort.Direction.DESC
-                , "createdTime")).stream().map(a -> new RequestTeamDto(a.getRequest(),a.getTeam().getName()))
+                , "createdTime")).stream().map(a -> new RequestTeamDto(a.getRequest(),a.getUser().getName()))
                 .collect(Collectors.toList());
     }
 
     @Override
     public void acceptMember(Long requestTeamId) {
-        RequestTeam requestTeam = requestTeamRepository.findWithFetchJoinUserById(requestTeamId).get();
+        RequestTeam requestTeam = requestTeamRepository.findWithFetchJoinUserById(requestTeamId).orElseThrow(
+                () -> {
+                    throw new NotExistRequestException("존재하지 않는 요청입니다.");
+                }
+        );
         User user = requestTeam.getUser();
-        if (user.getTeam() != null) {
-            throw new AlreadyTeamException("이미 다른팀에 속한 유저입니다.");
+        if (user.getTeam()!=null){
+            throw new AlreadyTeamException("이미 팀에 속해있습니다.");
+        }
+        if(requestTeam.getRequest()){
+            throw new AlreadyAcceptMemberException("이미 승인된 요청입니다.");
         }
         requestTeam.acceptRequest();
     }

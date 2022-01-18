@@ -141,7 +141,7 @@ class TeamServiceImplTest {
         List<RequestTeamDto> result = teamService.findRequestList(teamId);
 
         assertThat(result.size()).isEqualTo(1);
-        assertThat(result.get(0).teamName).isEqualTo("상명");
+        assertThat(result.get(0).MemberName).isEqualTo("상명");
     }
     @Test
     void findRestTeamSeat(){

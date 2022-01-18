@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RequestTeamDto {
-
     public boolean status;
-    public String teamName;
+    public String MemberName;
 }

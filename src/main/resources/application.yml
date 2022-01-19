@@ -1,10 +1,13 @@
 spring:
   datasource:
-    url:
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
-
+#    url:
+#    username: sa
+#    password:
+#    driver-class-name: org.h2.Driver
+    url: jdbc:mysql://localhost:3306/league?serverTimezone=UTC&characterEncoding=UTF-8
+    username: admin
+    password: kim2299
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:

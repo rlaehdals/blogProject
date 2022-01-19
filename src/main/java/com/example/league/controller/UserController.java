@@ -1,5 +1,6 @@
 package com.example.league.controller;
 
+import com.example.league.aop.MethodLog;
 import com.example.league.dto.LoginDto;
 import com.example.league.argumentresolver.SessionConst;
 import com.example.league.argumentresolver.SessionDto;
@@ -21,12 +22,13 @@ public class UserController {
 
     private final UserService userService;
 
+    @MethodLog
     @PostMapping("/signup")
     public ResponseEntity<String> signup(@RequestBody UserDto userDto){
         userService.signup(userDto);
         return new ResponseEntity<>("ok", HttpStatus.OK);
     }
-
+    @MethodLog
     @PostMapping("/login")
     public ResponseEntity<Long> login(@RequestBody LoginDto loginDto, HttpServletRequest request){
         SessionDto sessionDto = userService.login(loginDto);

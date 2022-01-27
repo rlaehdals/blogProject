@@ -36,7 +36,7 @@ public class WebConfig implements WebMvcConfigurer {
 
         registry.addInterceptor(new TeamInterceptor(userRepository,teamRepository,requestTeamRepository))
                 .addPathPatterns("/team/**")
-                .excludePathPatterns("/team","/team/rest");
+                .excludePathPatterns("/team/","/team/rest");
 
         registry.addInterceptor(new LeagueInterceptor(requestLeagueRepository,leagueRepository))
                 .addPathPatterns("/league/**")

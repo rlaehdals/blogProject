@@ -25,15 +25,15 @@ public class TeamController {
         return teamService.findTeamByName(teamName);
     }
     @MethodLog
-    @GetMapping("/rest")
-    public List<RestTeamDto> findRestTeam(){
-        return teamService.findRestTeamSeat();
+    @PostMapping("/")
+    public Long createTeam(@RequestBody TeamDto teamDto, @LoginUser SessionDto sessionDto){
+        return teamService.createTeam(teamDto, sessionDto.getId());
     }
 
     @MethodLog
-    @PostMapping("/new")
-    public Long createTeam(@RequestBody TeamDto teamDto, @LoginUser SessionDto sessionDto){
-        return teamService.createTeam(teamDto, sessionDto.getId());
+    @GetMapping("/rest")
+    public List<RestTeamDto> findRestTeam(){
+        return teamService.findRestTeamSeat();
     }
 
     @MethodLog

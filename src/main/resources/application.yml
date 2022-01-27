@@ -1,3 +1,12 @@
 spring:
   profiles:
     include: real-db
+
+
+#spring:
+#  config:
+#    activate:
+#      on-profile: "profile"
+#  profiles:
+#    include: "extra1,extra2"
+#

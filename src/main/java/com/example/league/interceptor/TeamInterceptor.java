@@ -38,13 +38,17 @@ public class TeamInterceptor implements HandlerInterceptor {
         SessionDto sessionUser = (SessionDto) session.getAttribute(SessionConst.LOGIN_MEMBER);
         String requestURI = request.getRequestURI();
 
+        if(requestURI.equals("/team/") && request.getMethod().equals("GET")){
+            return true;
+        }
+
         if (sessionUser.getRole() != ROLE.TEAM_FOUNDER) {
             response.sendRedirect("/err/team/noAuthority");
             return false;
         }
 
         User user = userRepository.findById(sessionUser.getId()).get();
-        if(requestURI.equals("/team/new")){
+        if(requestURI.equals("/team/")){
             return true;
         }
         else if(requestURI.contains("/team/request")){

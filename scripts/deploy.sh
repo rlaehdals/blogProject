@@ -1,5 +1,5 @@
 #!/bin/bash
-BUILD_JAR=$(ls /home/ubuntu/app/build/libs/*.jar)     # jar가 위치하는 곳
+BUILD_JAR=$(ls /home/ubuntu/app/build/libs/*.jar)     # 실행될 jar가 위치한 곳
 JAR_NAME=$(basename $BUILD_JAR)
 echo "> build 파일명: $JAR_NAME" >> /home/ubuntu/deploy.log
 

@@ -53,7 +53,7 @@ class UserServiceImplTest {
 
         assertThatThrownBy(() -> userService.signup(new UserDto(duplicateuser.getEmail(),
                 duplicateuser.getPassword(), duplicateuser.getName(),"user",
-                address.getCity(), address.getStreet()))).isInstanceOf(UserEmailOrPasswordWrongException.class);
+                address.getCity(), address.getStreet()))).isInstanceOf(UserEmailDuplicateException.class);
 
     }
     @Test

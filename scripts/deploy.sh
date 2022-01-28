@@ -1,5 +1,5 @@
 #!/bin/bash
-BUILD_JAR=$(ls /home/ubuntu/app/blogProject/build/libs/*.jar)     # jar가 위치하는 곳
+BUILD_JAR=$(ls /home/ubuntu/app/build/libs/*.jar)     # jar가 위치하는 곳
 JAR_NAME=$(basename $BUILD_JAR)
 echo "> build 파일명: $JAR_NAME" >> /home/ubuntu/deploy.log
 
@@ -21,4 +21,4 @@ fi
 
 DEPLOY_JAR=$DEPLOY_PATH$JAR_NAME
 echo "> DEPLOY_JAR 배포"    >> /home/ubuntu/deploy.log
-nohup java -jar $DEPLOY_JAR >> /home/ubuntu/deploy.log 2>/home/ubuntu/deploy_err.log &
+nohup java -jar -Dspring.config.location=classpath:/application.yml,/home/ubuntu/app/application-real-db.yml $DEPLOY_JAR >> /home/ubuntu/deploy.log 2>/home/ubuntu/deploy_err.log &

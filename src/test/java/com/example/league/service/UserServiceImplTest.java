@@ -3,11 +3,8 @@ package com.example.league.service;
 import com.example.league.domain.Address;
 import com.example.league.domain.ROLE;
 import com.example.league.domain.User;
-import com.example.league.dto.UserDto;
 import com.example.league.exception.UserEmailDuplicateException;
-import com.example.league.exception.UserEmailOrPasswordWrongException;
 import com.example.league.repository.UserRepository;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -29,52 +26,52 @@ class UserServiceImplTest {
     UserService userService;
 
 
-
     @Test
     void userSignupSuccess() {
         Address address = getAddress();
         User user = getuser(address);
-        Long signupuserId = userService.signup(new UserDto(user.getEmail(), user.getPassword(), user.getName()
-                ,"ROLE.user",address.getCity(), address.getStreet()));
+        Long signupUserId = userService.signup(user.getEmail(), user.getPassword(), user.getName()
+                , "user", address);
 
-        User result = userRepository.findById(signupuserId).get();
+        User result = userRepository.findById(signupUserId).get();
 
         assertThat(result.getEmail()).isEqualTo(user.getEmail());
 
     }
 
     @Test
-    void userSignupFailDuplicateEmail(){
+    void userSignupFailDuplicateEmail() {
         Address address = getAddress();
         User user = getuser(address);
-        User duplicateuser = getuser(address);
-        Long signupuserId = userService.signup(new UserDto(user.getEmail(), user.getPassword(), user.getName()
-                ,"user",address.getCity(), address.getStreet()));
+        User duplicateUser = getuser(address);
+        Long signupUserId = userService.signup(user.getEmail(), user.getPassword(), user.getName()
+                , "user", address);
 
-        assertThatThrownBy(() -> userService.signup(new UserDto(duplicateuser.getEmail(),
-                duplicateuser.getPassword(), duplicateuser.getName(),"user",
-                address.getCity(), address.getStreet()))).isInstanceOf(UserEmailDuplicateException.class);
+        assertThatThrownBy(() -> userService.signup(user.getEmail(), user.getPassword(), user.getName()
+                , "user", address)).isInstanceOf(UserEmailDuplicateException.class);
 
     }
+
     @Test
-    void userLoginSuccess(){
+    void userLoginSuccess() {
         Address address = getAddress();
         User user = getuser(address);
-        Long signupuserId = userService.signup(new UserDto(user.getEmail(), user.getPassword(), user.getName()
-                ,"user",address.getCity(), address.getStreet()));
-        Long signup = userService.signup(new UserDto("rkdlem1", "asdf","kim" ,"user","asdf", "asdf"));
+        Long signupUserId = userService.signup(user.getEmail(), user.getPassword(), user.getName()
+                , "user", address);
+        Long signup = userService.signup("rkdlem1", "asdf", "kim", "user", address);
         User result = userRepository.findById(signup).get();
 
         assertThat(result.getEmail()).isEqualTo("rkdlem1");
     }
+
     @Test
-    void userLoginFailDuplicateEmail(){
+    void userLoginFailDuplicateEmail() {
         Address address = getAddress();
         User user = getuser(address);
-        Long signupUserId = userService.signup(new UserDto(user.getEmail(), user.getPassword(), user.getName()
-                ,"user",address.getCity(), address.getStreet()));
-        assertThatThrownBy(()->userService.signup(new UserDto("rkdlem48", "asdf", "kim","user","asdf"
-                , "asdf"))).isInstanceOf(UserEmailDuplicateException.class);
+        Long signupUserId = userService.signup(user.getEmail(), user.getPassword(), user.getName()
+                , "user", address);
+        assertThatThrownBy(() -> userService.signup(user.getEmail(), user.getPassword(), user.getName()
+                , "user", address)).isInstanceOf(UserEmailDuplicateException.class);
 
 
     }

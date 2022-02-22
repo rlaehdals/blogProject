@@ -8,6 +8,22 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TeamDto {
-    public String name;
-    public int size;
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class CreateOrUpdateTeamDto{
+        public String name;
+        public int size;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class RestTeamDto {
+        public String teamName;
+        public Integer maxSize;
+        public Integer nowSize;
+    }
+
 }

@@ -87,9 +87,9 @@ public class Team extends BaseEntity {
         userList=null;
     }
 
-    public void update(TeamDto teamDto){
-        this.name=teamDto.getName();
-        this.maxSize=teamDto.getSize();
+    public void update(String name, int size){
+        this.name=name;
+        this.maxSize=size;
     }
 
 }

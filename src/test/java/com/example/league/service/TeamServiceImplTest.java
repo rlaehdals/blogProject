@@ -5,9 +5,9 @@ import com.example.league.domain.ROLE;
 import com.example.league.domain.Team;
 import com.example.league.domain.User;
 import com.example.league.dto.RequestTeamDto;
-import com.example.league.dto.RestTeamDto;
 import com.example.league.dto.TeamDto;
-import com.example.league.exception.*;
+import com.example.league.exception.DuplicateTeamNameException;
+import com.example.league.exception.NotMatchingTeamNameException;
 import com.example.league.repository.TeamRepository;
 import com.example.league.repository.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -42,7 +42,7 @@ class TeamServiceImplTest {
         User user = getTeamFounder1(address);
         Long teamFounderId = userRepository.save(user).getId();
 
-        Long teamId = teamService.createTeam(new TeamDto("상명", 10), teamFounderId);
+        Long teamId = teamService.createTeam("상명", 10, teamFounderId);
 
         Team team = teamRepository.findById(teamId).get();
 
@@ -58,9 +58,9 @@ class TeamServiceImplTest {
         Long teamFounderId1 = userRepository.save(user).getId();
         User user2 = getTeamFounder2(address);
         Long teamFounderId2 = userRepository.save(user2).getId();
-        Long teamId = teamService.createTeam(new TeamDto("상명", 10), teamFounderId1);
+        Long teamId = teamService.createTeam("상명", 10, teamFounderId1);
 
-        assertThatThrownBy(() -> teamService.createTeam(new TeamDto("상명",10),teamFounderId2))
+        assertThatThrownBy(() -> teamService.createTeam("상명",10,teamFounderId2))
                 .isInstanceOf(DuplicateTeamNameException.class);
     }
     @Test
@@ -68,7 +68,7 @@ class TeamServiceImplTest {
         Address address = getAddress();
         User user = getTeamFounder1(address);
         Long teamFounderId1 = userRepository.save(user).getId();
-        Long teamId = teamService.createTeam(new TeamDto("상명", 10), teamFounderId1);
+        Long teamId = teamService.createTeam("상명", 10, teamFounderId1);
 
         teamService.deleteTeam(teamId);
 
@@ -85,12 +85,12 @@ class TeamServiceImplTest {
         Address address = getAddress();
         User user = getTeamFounder1(address);
         Long teamFounderId1 = userRepository.save(user).getId();
-        Long teamId1 = teamService.createTeam(new TeamDto("상명", 10), teamFounderId1);
+        Long teamId1 = teamService.createTeam("상명", 10, teamFounderId1);
         User user2 = getTeamFounder2(address);
         Long teamFounderId2 = userRepository.save(user2).getId();
-        Long teamId2 = teamService.createTeam(new TeamDto("국민", 10), teamFounderId2);
+        Long teamId2 = teamService.createTeam("국민", 10, teamFounderId1);
 
-        Long updateId = teamService.updateTeam(new TeamDto("경복", 10), teamId2, teamFounderId2);
+        Long updateId = teamService.updateTeam("경복", 10, teamId2, teamFounderId2);
         Team team = teamRepository.findById(updateId).get();
 
         assertThat(team.getEmail()).isEqualTo(user2.getEmail());
@@ -102,12 +102,12 @@ class TeamServiceImplTest {
         Address address = getAddress();
         User user = getTeamFounder1(address);
         Long teamFounderId1 = userRepository.save(user).getId();
-        Long teamId1 = teamService.createTeam(new TeamDto("상명", 10), teamFounderId1);
+        Long teamId1 = teamService.createTeam("상명", 10, teamFounderId1);
         User user2 = getTeamFounder2(address);
         Long teamFounderId2 = userRepository.save(user2).getId();
-        Long teamId2 = teamService.createTeam(new TeamDto("국민", 10), teamFounderId2);
+        Long teamId2 = teamService.createTeam("국민", 10, teamFounderId2);
 
-        assertThatThrownBy(() -> teamService.updateTeam(new TeamDto("상명", 10), teamId2, teamFounderId1))
+        assertThatThrownBy(() -> teamService.updateTeam("상명", 10, teamId2, teamFounderId1))
                 .isInstanceOf(DuplicateTeamNameException.class);
     }
 
@@ -116,7 +116,7 @@ class TeamServiceImplTest {
         Address address = getAddress();
         User user1 = getTeamFounder1(address);
         Long teamFounderId = userRepository.save(user1).getId();
-        Long teamId = teamService.createTeam(new TeamDto("상명", 10), teamFounderId);
+        Long teamId = teamService.createTeam("상명", 10, teamFounderId);
         User user2 = getMember(address);
         Long memberId = userRepository.save(user2).getId();
         Long requestTeamId = memberService.requestTeam(teamId, memberId);
@@ -133,7 +133,7 @@ class TeamServiceImplTest {
         Address address = getAddress();
         User user1 = getTeamFounder1(address);
         Long teamFounderId = userRepository.save(user1).getId();
-        Long teamId = teamService.createTeam(new TeamDto("상명", 10), teamFounderId);
+        Long teamId = teamService.createTeam("상명", 10, teamFounderId);
         User user2 = getMember(address);
         Long memberId = userRepository.save(user2).getId();
         Long requestTeamId = memberService.requestTeam(teamId, memberId);
@@ -148,16 +148,16 @@ class TeamServiceImplTest {
         Address address = getAddress();
         User user = getTeamFounder1(address);
         Long teamFounderId1 = userRepository.save(user).getId();
-        Long teamId1 = teamService.createTeam(new TeamDto("상명", 1), teamFounderId1);
+        Long teamId1 = teamService.createTeam("상명", 1, teamFounderId1);
         User user2 = getTeamFounder2(address);
         Long teamFounderId2 = userRepository.save(user2).getId();
-        Long teamId2 = teamService.createTeam(new TeamDto("국민", 10), teamFounderId2);
+        Long teamId2 = teamService.createTeam("국민", 10, teamFounderId2);
         User user3 = getMember(address);
         Long memberId = userRepository.save(user3).getId();
         Long requestTeamId = memberService.requestTeam(teamId1, memberId);
         teamService.acceptMember(requestTeamId);
 
-        List<RestTeamDto> result = teamService.findRestTeamSeat();
+        List<TeamDto.RestTeamDto> result = teamService.findRestTeamSeat();
 
         assertThat(result.size()).isEqualTo(1);
         assertThat(result.get(0).getTeamName()).isEqualTo("국민");
@@ -168,8 +168,8 @@ class TeamServiceImplTest {
         Address address = getAddress();
         User user = getTeamFounder1(address);
         Long teamFounderId1 = userRepository.save(user).getId();
-        Long teamId1 = teamService.createTeam(new TeamDto("상명", 10), teamFounderId1);
-        RestTeamDto result = teamService.findTeamByName("상명");
+        Long teamId1 = teamService.createTeam("상명", 10, teamFounderId1);
+        TeamDto.RestTeamDto result = teamService.findTeamByName("상명");
 
         assertThat(result.getTeamName()).isEqualTo("상명");
         assertThat(result.getMaxSize()).isEqualTo(10);
@@ -181,7 +181,7 @@ class TeamServiceImplTest {
         Address address = getAddress();
         User user = getTeamFounder1(address);
         Long teamFounderId1 = userRepository.save(user).getId();
-        Long teamId1 = teamService.createTeam(new TeamDto("상명", 10), teamFounderId1);
+        Long teamId1 = teamService.createTeam("상명", 10, teamFounderId1);
 
         assertThatThrownBy(() -> teamService.findTeamByName("국민"))
                 .isInstanceOf(NotMatchingTeamNameException.class);

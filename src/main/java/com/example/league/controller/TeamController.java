@@ -4,9 +4,7 @@ import com.example.league.aop.MethodLog;
 import com.example.league.argumentresolver.LoginUser;
 import com.example.league.argumentresolver.SessionDto;
 import com.example.league.dto.RequestTeamDto;
-import com.example.league.dto.RestTeamDto;
 import com.example.league.dto.TeamDto;
-import com.example.league.dto.TeamRequestToLeagueDto;
 import com.example.league.service.TeamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -21,18 +19,19 @@ public class TeamController {
     private final TeamService teamService;
     @MethodLog
     @GetMapping("/")
-    public RestTeamDto findByName(@RequestParam(name =" teamName") String teamName){
+    public TeamDto.RestTeamDto findByName(@RequestParam(name =" teamName") String teamName){
         return teamService.findTeamByName(teamName);
     }
     @MethodLog
     @PostMapping("/")
-    public Long createTeam(@RequestBody TeamDto teamDto, @LoginUser SessionDto sessionDto){
-        return teamService.createTeam(teamDto, sessionDto.getId());
+    public Long createTeam(@RequestBody TeamDto.CreateOrUpdateTeamDto createOrUpdateTeamDto, @LoginUser SessionDto sessionDto){
+        return teamService.createTeam(createOrUpdateTeamDto.getName(),createOrUpdateTeamDto.getSize()
+                , sessionDto.getId());
     }
 
     @MethodLog
     @GetMapping("/rest")
-    public List<RestTeamDto> findRestTeam(){
+    public List<TeamDto.RestTeamDto> findRestTeam(){
         return teamService.findRestTeamSeat();
     }
 
@@ -45,9 +44,9 @@ public class TeamController {
 
     @MethodLog
     @PatchMapping("/{teamId}")
-    public Long updateTeam(@RequestBody TeamDto teamDto, @PathVariable(name = "teamId") Long teamId
+    public Long updateTeam(@RequestBody TeamDto.CreateOrUpdateTeamDto createOrUpdateTeamDto, @PathVariable(name = "teamId") Long teamId
             , @LoginUser SessionDto sessionDto){
-        return teamService.updateTeam(teamDto,teamId, sessionDto.getId());
+        return teamService.updateTeam(createOrUpdateTeamDto.getName(),createOrUpdateTeamDto.getSize(),teamId, sessionDto.getId());
     }
 
     @MethodLog

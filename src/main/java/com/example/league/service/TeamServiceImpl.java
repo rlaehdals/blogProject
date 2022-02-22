@@ -6,9 +6,7 @@ import com.example.league.domain.User;
 import com.example.league.domain.request.RequestLeague;
 import com.example.league.domain.request.RequestTeam;
 import com.example.league.dto.RequestTeamDto;
-import com.example.league.dto.RestTeamDto;
 import com.example.league.dto.TeamDto;
-import com.example.league.dto.TeamRequestToLeagueDto;
 import com.example.league.exception.*;
 import com.example.league.repository.*;
 import lombok.RequiredArgsConstructor;
@@ -30,10 +28,10 @@ public class TeamServiceImpl implements TeamService {
     private final LeagueRepository leagueRepository;
 
     @Override
-    public Long createTeam(TeamDto teamDto, Long userId) {
+    public Long createTeam(String name, int size, Long userId) {
         User user = userRepository.findById(userId).get();
-        checkDuplicateTeamName(teamDto);
-        Team team = Team.createTeam(user, teamDto.getName(), teamDto.getSize());
+        checkDuplicateTeamName(name);
+        Team team = Team.createTeam(user, name, size);
         return teamRepository.save(team).getId();
     }
 
@@ -69,29 +67,29 @@ public class TeamServiceImpl implements TeamService {
     }
 
     @Override
-    public Long updateTeam(TeamDto teamDto, Long teamId, Long userId) {
+    public Long updateTeam(String name, int size, Long teamId, Long userId) {
         User user = userRepository.findById(userId).get();
         Team team = teamRepository.findById(teamId).get();
-        checkDuplicateTeamName(teamDto);
-        team.update(teamDto);
+        checkDuplicateTeamName(name);
+        team.update(name,size);
         return team.getId();
     }
 
     @Override
-    public List<RestTeamDto> findRestTeamSeat() {
-        return teamRepository.findByRestSeat().stream().map( a -> new RestTeamDto(a.getName(),a.getMaxSize(),a.getNowSize()))
+    public List<TeamDto.RestTeamDto> findRestTeamSeat() {
+        return teamRepository.findByRestSeat().stream().map( a -> new TeamDto.RestTeamDto(a.getName(),a.getMaxSize(),a.getNowSize()))
                 .collect(Collectors.toList());
     }
 
     @Override
-    public RestTeamDto findTeamByName(String teamName) {
+    public TeamDto.RestTeamDto findTeamByName(String teamName) {
         Team team = teamRepository.findByName(teamName).orElseThrow(
                 () -> {
                     throw new NotMatchingTeamNameException("일치하는 이름의 팀이 없습니다.");
                 }
         );
 
-        return new RestTeamDto(team.getName(),team.getMaxSize(),team.getNowSize());
+        return new TeamDto.RestTeamDto(team.getName(),team.getMaxSize(),team.getNowSize());
     }
 
     @Override
@@ -120,8 +118,8 @@ public class TeamServiceImpl implements TeamService {
         requestLeagueRepository.deleteById(requestLeague.getId());
     }
 
-    private void checkDuplicateTeamName(TeamDto teamDto) {
-        teamRepository.findByName(teamDto.getName()).ifPresent(
+    private void checkDuplicateTeamName(String name) {
+        teamRepository.findByName(name).ifPresent(
                 a -> {
                     throw new DuplicateTeamNameException("이미 같은 이름의 팀이 있습니다.");
                 }

@@ -25,41 +25,36 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public Long signup(UserDto userDto){
-        userRepository.findByEmail(userDto.getEmail()).ifPresent(
+    public Long signup(String email, String password, String role,String name,Address address){
+        userRepository.findByEmail(email).ifPresent(
                 a -> {
                     throw new UserEmailDuplicateException("이미 존재하는 EMAIL 입니다.");
 
                 });
-        Address address = Address.builder()
-                .city(userDto.getCity())
-                .street(userDto.getStreet())
-                .build();
-        ROLE role = makeRole(userDto);
-        User member = User.createUser(userDto.getEmail(), userDto.getPassword()
-                , userDto.getName(), address,role);
+        ROLE userRole = makeRole(role);
+        User member = User.createUser(email,password,name,address,userRole);
         return userRepository.save(member).getId();
     }
 
     @Override
     @Transactional
-    public SessionDto login(LoginDto loginDto) {
-        User member = userRepository.findByEmail(loginDto.getEmail()).orElseThrow(
+    public SessionDto login(String email, String password) {
+        User member = userRepository.findByEmail(email).orElseThrow(
                 () -> {
                     throw new UserEmailOrPasswordWrongException("아이디 혹은 비밀번호가 틀렸습니다.");
                 }
         );
-        if (!member.getPassword().equals(loginDto.getPassword())){
+        if (!member.getPassword().equals(password)){
             throw new UserEmailOrPasswordWrongException("아이디 혹은 비밀번호가 틀렸습니다.");
         }
         return new SessionDto(member.getEmail(),member.getId(),member.getName(),member.getRole());
     }
 
-    private ROLE makeRole(UserDto userDto) {
-        if(userDto.getRole().equals("member")){
+    private ROLE makeRole(String role) {
+        if(role.equals("member")){
             return  ROLE.MEMBER;
         }
-        else if(userDto.getRole().equals("founder")){
+        else if(role.equals("founder")){
             return  ROLE.TEAM_FOUNDER;
         }
         else{

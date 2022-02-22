@@ -1,11 +1,9 @@
 package com.example.league.service;
 
+import com.example.league.argumentresolver.SessionDto;
 import com.example.league.domain.Address;
 import com.example.league.domain.ROLE;
 import com.example.league.domain.User;
-import com.example.league.dto.LoginDto;
-import com.example.league.argumentresolver.SessionDto;
-import com.example.league.dto.UserDto;
 import com.example.league.exception.UserEmailDuplicateException;
 import com.example.league.exception.UserEmailOrPasswordWrongException;
 import com.example.league.repository.UserRepository;

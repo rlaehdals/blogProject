@@ -1,10 +1,9 @@
 package com.example.league.controller;
 
 import com.example.league.aop.MethodLog;
-import com.example.league.domain.Address;
-import com.example.league.dto.LoginDto;
 import com.example.league.argumentresolver.SessionConst;
 import com.example.league.argumentresolver.SessionDto;
+import com.example.league.domain.Address;
 import com.example.league.dto.UserDto;
 import com.example.league.service.UserService;
 import lombok.RequiredArgsConstructor;
